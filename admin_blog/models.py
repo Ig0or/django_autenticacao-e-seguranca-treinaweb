@@ -1,9 +1,11 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
+from .manager import UsuarioManager
 
 # Create your models here.
 
 class Usuario(AbstractBaseUser):
+    objects = UsuarioManager()
     nome = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(unique=True, null=False, blank=False)
     pais_origem = models.CharField(max_length=20, null=False, blank=False)
