@@ -3,8 +3,9 @@ from admin_blog.models import Usuario
 from admin_blog.services import post_service, comentario_service, usuario_service
 from admin_blog.forms import comentario_form, usuario_form, login_form
 from admin_blog.entidades.comentario import Comentario
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -16,13 +17,16 @@ def listar_post_id(request, id):
     post = post_service.listar_post_id(id)
     comentarios = comentario_service.listar_comentarios(id)
     if request.method == "POST":
-        form_comentario = comentario_form.ComentarioForm(request.POST)
-        if form_comentario.is_valid():
-            conteudo = form_comentario.cleaned_data["conteudo"]
-            usuario = request.user
-            comentario_novo = Comentario(conteudo=conteudo, post=post, usuario=usuario)
-            comentario_service.cadastrar_comentario(comentario_novo)
-            return redirect('listar_post', post.id)
+        if request.user.is_authenticated:
+            form_comentario = comentario_form.ComentarioForm(request.POST)
+            if form_comentario.is_valid():
+                conteudo = form_comentario.cleaned_data["conteudo"]
+                usuario = request.user
+                comentario_novo = Comentario(conteudo=conteudo, post=post, usuario=usuario)
+                comentario_service.cadastrar_comentario(comentario_novo)
+                return redirect('listar_post', post.id)
+        else:
+            return redirect('logar_usuario')
     else:
         form_comentario = comentario_form.ComentarioForm()
     return render(request, 'blog/post.html', {'post': post, 'comentarios': comentarios, 'form_comentario': form_comentario})
@@ -62,3 +66,15 @@ def logar_usuario(request):
 def deslogar_usuario(request):
     logout(request)
     return redirect('home')
+
+@login_required()
+def alterar_senha(request):
+    if request.method == 'POST':
+        form_senha = PasswordChangeForm(request.user, request.POST)
+        if form_senha.is_valid():
+            user = form_senha.save()
+            update_session_auth_hash(request, user)
+            return redirect('home')
+    else:
+        form_senha = PasswordChangeForm(request.user)
+    return render(request, 'usuario/alterar_senha.html', {'form_senha': form_senha})
