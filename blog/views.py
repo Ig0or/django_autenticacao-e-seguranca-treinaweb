@@ -4,7 +4,7 @@ from admin_blog.services import post_service, comentario_service, usuario_servic
 from admin_blog.forms import comentario_form, usuario_form, login_form
 from admin_blog.entidades.comentario import Comentario
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -58,3 +58,7 @@ def logar_usuario(request):
     else:
         form_login = login_form.LoginForm()
     return render(request, 'usuario/login.html', {'form_login': form_login})
+
+def deslogar_usuario(request):
+    logout(request)
+    return redirect('home')
