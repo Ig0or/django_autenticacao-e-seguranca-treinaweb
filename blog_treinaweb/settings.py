@@ -125,6 +125,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.social_auth.associate_by_email',
     'social_core.pipeline.user.create_user',
+    'admin_blog.pipelines.save_profile',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
@@ -133,6 +134,8 @@ SOCIAL_AUTH_PIPELINE = (
 AUTH_USER_MODEL = 'admin_blog.Usuario'
 
 LOGIN_URL = 'logar_usuario'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'home'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
