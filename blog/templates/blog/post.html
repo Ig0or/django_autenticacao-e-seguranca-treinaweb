@@ -4,7 +4,11 @@
 
 {% block header %}
   <!-- Page Header -->
+  {% if post.capa %}
+  <header class="masthead" style="background-image: url('{{ post.capa.url }}')">
+  {% else %}
   <header class="masthead" style="background-image: url('{% static  'blog/img/home-bg.jpg' %}')">
+  {% endif %}
     <div class="overlay"></div>
     <div class="container">
       <div class="row">

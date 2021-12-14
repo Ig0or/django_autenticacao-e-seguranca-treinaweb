@@ -9,8 +9,7 @@ def listar_post_id(id):
     return post
 
 def cadastrar_post(post):
-    Post.objects.create(titulo=post.titulo, descricao=post.descricao, conteudo=post.conteudo,
-                        categoria=post.categoria)
+    Post.objects.create(titulo=post.titulo, descricao=post.descricao, conteudo=post.conteudo, categoria=post.categoria, capa=post.capa)
 
 def editar_post(post, post_novo):
     post.titulo = post_novo.titulo

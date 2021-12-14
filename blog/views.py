@@ -6,7 +6,7 @@ from admin_blog.entidades.comentario import Comentario
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def index(request):
@@ -31,6 +31,7 @@ def listar_post_id(request, id):
         form_comentario = comentario_form.ComentarioForm()
     return render(request, 'blog/post.html', {'post': post, 'comentarios': comentarios, 'form_comentario': form_comentario})
 
+# @csrf_exempt
 def cadastrar_usuario(request):
     if request.method == 'POST':
         form_usuario = usuario_form.UsuarioForm(request.POST)
